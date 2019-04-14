@@ -1,0 +1,17 @@
+version: '2'
+
+networks:
+  bridge:
+    driver: bridge
+
+services:
+  nsq:
+    image: nsqio/nsq
+    ports:
+      - "4161:4161"
+      - "4160:4160"
+  mongo:
+    image: mvertes/alpine-mongo
+    ports:
+      - '27017:27017'
+    command: --smallfiles

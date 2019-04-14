@@ -1,2 +1,6 @@
+github.com/gomodule/oauth1 v0.0.0-20181215000758-9a59ed3b0a84 h1:NlNEdePx7QY9Z4rds4EIe1dvUT8Ao1PZgLS80S5YTbU=
+github.com/gomodule/oauth1 v0.0.0-20181215000758-9a59ed3b0a84/go.mod h1:4r/a8/3RkhMBxJQWL5qzbOEcaQmNPIkNoI7P8sXeI08=
 github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=
 github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
+github.com/joeshaw/envdecode v0.0.0-20180312135643-c9e015854467 h1:REcMVvHDwEBFDEUrphtsx+/LqVKkKfcWxnAuVKFzSWk=
+github.com/joeshaw/envdecode v0.0.0-20180312135643-c9e015854467/go.mod h1:Q+alOFAXgW5SrcfMPt/G4B2oN+qEcQRJjkn/f4mKL04=
