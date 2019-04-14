@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>チャット</title>
+    <style>
+        input { display: block;}
+        ul { list-style: none; }
+    </style>
+</head>
+<body>
+    <ul id="messages"><!-- ajax --></ul>
+    WebSocketを使ったチャットアプリケーション
+    <form id="chat-box">
+        <textarea></textarea>
+        <input type="submit" value="送信" />
+    </form>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            var socket = null;
+            var msgBox = $("#chat-box textarea");
+            var messages = $("#messages");
+
+            $("#chat-box").submit(function () {
+                console.log("send");
+                if (!msgBox.val()) {
+                    return false;
+                }
+                if (!socket) {
+                    alert("webSocketが確立されていません");
+                    return false;
+                }
+
+                socket.send(msgBox.val());
+                msgBox.val("");
+                return false
+            });
+
+            if (!window["WebSocket"]) {
+                alert("Websocketに対応してないブラウザです")
+            } else {
+                socket = new WebSocket("ws://{{.Host}}/room");
+                console.log("webSocketを確立します");
+                socket.onclose = function () {
+                    console.log("接続が終了しました")
+                };
+                socket.onmessage = function (e) {
+                    messages.append($("<li>").text(e.data))
+                };
+            }
+        });
+    </script>
+</body>
+</html>

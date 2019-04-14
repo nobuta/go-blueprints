@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"html/template"
 	"log"
 	"net/http"
@@ -24,16 +24,25 @@ func current() string {
 func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.once.Do(func() {
 		path := filepath.Join( current(), "templates", t.file)
-		fmt.Println(path)
 		t.tmpl = template.Must(template.ParseFiles(path))
 	})
-	_ = t.tmpl.Execute(w, nil)
+	_ = t.tmpl.Execute(w, r)
 }
 
 func main() {
-	http.Handle("/", &templateHandler{file:"index.html"})
+	var addr = flag.String("addr", ":8080", "Listen AddressAndPort");
+	flag.Parse()
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+
+	room := newRoom()
+	http.Handle("/", &templateHandler{file:"chat.html"})
+	http.Handle("/room", room)
+
+	// channelの待ち受け開始
+	go room.run()
+
+	log.Println("Listen", *addr)
+	if err := http.ListenAndServe(*addr, nil); err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}
 }
