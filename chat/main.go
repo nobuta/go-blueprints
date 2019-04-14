@@ -2,9 +2,11 @@ package main
 
 import (
 	"flag"
+	"ghithub.com/nobuta/go-blueprints/chat/trace"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"runtime"
 	"sync"
@@ -35,6 +37,8 @@ func main() {
 
 
 	room := newRoom()
+	room.tracer = trace.New(os.Stdout)
+
 	http.Handle("/", &templateHandler{file:"chat.html"})
 	http.Handle("/room", room)
 

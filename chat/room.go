@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ghithub.com/nobuta/go-blueprints/chat/trace"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
@@ -11,6 +12,7 @@ type room struct {
 	join chan *client
 	leave chan *client
 	clients map[*client]bool
+	tracer trace.Tracer
 }
 
 const (
@@ -28,14 +30,16 @@ func (r *room) run(){
 		select {
 		case client := <- r.join:
 
-			log.Println("join")
 			r.clients[client] = true
+			r.tracer.Trace("join...")
 		case client := <- r.leave:
 
 			delete(r.clients, client)
 			close(client.send)
+			r.tracer.Trace("leave...")
 		case msg := <- r.forward:
 
+			r.tracer.Trace("receive message: ", string(msg))
 			for client := range r.clients {
 				select {
 				case client.send <- msg:
@@ -56,7 +60,7 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		log.Fatal("ServeHTTP:", err)
 		return
 	}
-	log.Println(req.RemoteAddr, req.Header.Get("user-agent"))
+	r.tracer.Trace(req.RemoteAddr, " ", req.Header.Get("user-agent"))
 
 	client := &client{
 		socket: socket,
@@ -81,5 +85,6 @@ func newRoom() *room {
 		join: make(chan *client),
 		leave: make(chan *client),
 		clients: make(map [*client]bool),
+		tracer: trace.Noop(),
 	}
 }
