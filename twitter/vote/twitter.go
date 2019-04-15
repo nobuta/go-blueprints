@@ -68,7 +68,7 @@ func setupOAuth() {
 	}}
 }
 
-func makeRequest(req *http.Request, params url.Values) (*http.Response, err error) {
+func makeRequest(req *http.Request, params url.Values) (*http.Response, error) {
 	authSetupOnce.Do(func() {
 		setupOAuth()
 		httpclient = &http.Client{
